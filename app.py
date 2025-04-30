@@ -177,6 +177,12 @@ if prediction_type == "Tabular Data":
         input_data = [[breast_density, mass_shape_numeric, mass_margin_numeric]]
         input_df = pd.DataFrame(input_data, columns=['breast density', 'mass shape', 'mass margin'])
 
+        # Map input feature names to match those used during scaler training
+        input_df.rename(columns={
+            'breast density': 'breast_density',
+            'mass margin': 'mass margins'
+        }, inplace=True)
+
         # Normalize the input data
         input_data_scaled = scaler_breast.transform(input_df)
 
