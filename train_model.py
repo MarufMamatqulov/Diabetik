@@ -32,7 +32,9 @@ heart_columns_to_replace = ['chol', 'trestbps', 'thalch']
 for column in heart_columns_to_replace:
     heart_data[column] = heart_data[column].replace(0, heart_data[column].mean())
 
-# Ensure the 'dataset' column is dropped from heart_data
+# Drop the 'id' column from heart_data to avoid including it in training
+heart_data = heart_data.drop('id', axis=1, errors='ignore')
+# Drop the 'dataset' column from heart_data to avoid invalid data types
 heart_data = heart_data.drop('dataset', axis=1, errors='ignore')
 
 # Prepare breast cancer data (combine calc and mass datasets)

@@ -121,7 +121,7 @@ if prediction_type == "Tabular Data":
         chol = st.number_input("Cholesterol (mg/dL)", 0, 600, 0)
         fbs = st.selectbox("Fasting Blood Sugar > 120 mg/dL", [0, 1], format_func=lambda x: "No" if x == 0 else "Yes")
         restecg = st.selectbox("Resting ECG Result", [0, 1, 2])
-        thalach = st.number_input("Maximum Heart Rate Achieved", 0, 220, 0)
+        thalch = st.number_input("Maximum Heart Rate Achieved", 0, 220, 0)
         exang = st.selectbox("Exercise Induced Angina", [0, 1], format_func=lambda x: "No" if x == 0 else "Yes")
         oldpeak = st.number_input("ST Depression Induced by Exercise", 0.0, 10.0, 0.0)
         slope = st.selectbox("Slope of the Peak Exercise ST Segment", [0, 1, 2])
@@ -129,20 +129,15 @@ if prediction_type == "Tabular Data":
         thal = st.selectbox("Thalassemia", [0, 1, 2, 3])
 
         # Check if required columns are present in heart_data
-        required_columns = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
+        required_columns = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalch', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
         missing_columns = [col for col in required_columns if col not in heart_data.columns]
         if missing_columns:
             st.error(f"Missing columns in heart data: {', '.join(missing_columns)}")
             st.stop()
 
-        # Prepare the input data for heart disease
-        input_data = [[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]]
-        input_df = pd.DataFrame(input_data, columns=['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal'])
-
-        # Replace zero values with the mean
-        for column in ['trestbps', 'chol', 'thalach']:
-            if input_df[column][0] == 0:
-                input_df[column] = heart_data[column].mean()
+        # Ensure the input data matches the 13 features used during training
+        input_data = [[age, sex, cp, trestbps, chol, fbs, restecg, thalch, exang, oldpeak, slope, ca, thal]]
+        input_df = pd.DataFrame(input_data, columns=['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalch', 'exang', 'oldpeak', 'slope', 'ca', 'thal'])
 
         # Normalize the input data
         input_data_scaled = scaler_heart.transform(input_df)
